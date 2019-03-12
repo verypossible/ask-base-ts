@@ -1,0 +1,32 @@
+{
+  "name": "ask-base-ts",
+  "version": "1.0.0",
+  "description": "Base template for Alexa Skills + lambda handler written in TypeScript.",
+  "main": "index.ts",
+  "scripts": {
+    "clean": "rm -rf dist/*",
+    "build": "tsc",
+    "test": "AWS_REGION=us-east-1 mocha -r ts-node/register test/test*.ts"
+  },
+  "author": "David Hunt <david@verypossible.com>",
+  "license": "ISC",
+  "dependencies": {
+    "ask-constants": "0.0.1",
+    "ask-sdk": "^2.3.0",
+    "ask-sdk-core": "^2.0.0",
+    "ask-sdk-model": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^11.9.3",
+    "ask-assertions": "^1.0.2",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "prettier": "^1.16.4",
+    "sinon": "^7.2.4",
+    "ts-node": "^8.0.2",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.3.3"
+  }
+}
