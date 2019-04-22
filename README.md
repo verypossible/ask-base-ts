@@ -17,3 +17,19 @@
 | `Constants.ts`             | Exports misc. constant values.                                                            | Project settings or shared map keys. Note: probably needs refactoring.                                                  |
 | `RequestHandlerBuilder.ts` | Binds handler objects and functions to self, then determines `canHandle` for you.         |                                                                                                                         |
 | `index.ts`                 | Lambda entry point. Imports and connects handlers, then exports handler function.         |                                                                                                                         |
+
+## Requirements
+
+- Git
+- AWS Credentials
+- Alexa Console Account
+- Node.js >= 10
+- [ASK CLI](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html)
+  - `$ npm install -g ask-cli`
+    > The first time you use ASK CLI, you must use the ask init command to initialize ASK CLI with your Amazon and AWS credentials.
+
+## Usage
+
+```bash
+$ ask new --url https://github.com/verypossible/ask-base-ts.git --skill-name MY-SKILL-NAME
+```
