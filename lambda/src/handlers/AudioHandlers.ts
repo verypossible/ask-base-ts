@@ -25,7 +25,7 @@ export const AudioHandler: IHandler = {
 
     const url = getAudioTokenFromHandlerInput(input);
     if (url) {
-      return audio.play({ url });
+      return audio.play({ url }, input);
     }
 
     return input.responseBuilder.getResponse();

@@ -21,7 +21,7 @@ export const PlaybackControllerHandler: IHandler = {
   [requests.PlaybackController.PLAY]: async (input: HandlerInput): Promise<Response> => {
     const url = getAudioTokenFromHandlerInput(input);
     if (url) {
-      return audio.play({ url });
+      return audio.play({ url }, input);
     }
     return input.responseBuilder.speak(Strings.UNHANDLED_MSG).getResponse();
   },
