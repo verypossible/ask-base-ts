@@ -1,18 +1,25 @@
 // This file exports a controller for providing audio play/stop functionality.
 
 import { HandlerInput, ImageHelper, ResponseFactory } from "ask-sdk-core";
-import { Response } from "ask-sdk-model";
+import { interfaces, Response } from "ask-sdk-model";
 
-// Retrieve the audio stream url by pulling it out of the context.
-// Use this when the session is not available.
-export function getStreamURLFromContext(input: HandlerInput): string {
-  let url;
+import { deviceHasDisplaySupport } from "../handlers";
+
+// Retrieve an audio token from the handler input
+export function getAudioTokenFromHandlerInput(input: HandlerInput): string {
+  let token: string;
+
   try {
-    url = input.requestEnvelope.context.AudioPlayer.token;
+    if (input.requestEnvelope.request.type.startsWith("AudioPlayer")) {
+      token = (input.requestEnvelope.request as interfaces.audioplayer.PlaybackFailedRequest).token;
+    } else {
+      token = input.requestEnvelope.context.AudioPlayer.token;
+    }
   } catch (e) {
     // do nothing
   }
-  return url;
+
+  return token;
 }
 
 interface AudioOptions {
@@ -23,11 +30,16 @@ interface AudioOptions {
 type AudioStopOptions = AudioOptions;
 
 interface AudioPlayOptions extends AudioOptions {
+  offset?: number;
+  token?: string;
   url: string;
 }
 
 class AudioController {
-  public play({ backgroundImageURL, url, text }: AudioPlayOptions, input?: HandlerInput): Response {
+  public play(
+    { backgroundImageURL, offset, text, token, url }: AudioPlayOptions,
+    input: HandlerInput
+  ): Response {
     /*
      *  Using the function to begin playing audio when:
      *    Play Audio intent invoked.
@@ -42,13 +54,15 @@ class AudioController {
     const result = ResponseFactory.init();
 
     // we are using url as token as they are all unique
-    result.addAudioPlayerPlayDirective("REPLACE_ALL", url, url, 0).withShouldEndSession(true);
+    result
+      .addAudioPlayerPlayDirective("REPLACE_ALL", url, token || url, offset || 0)
+      .withShouldEndSession(true);
 
     if (text) {
       result.speak(text);
     }
 
-    if (backgroundImageURL) {
+    if (backgroundImageURL && deviceHasDisplaySupport(input)) {
       const backgroundImage = new ImageHelper().addImageInstance(backgroundImageURL).getImage();
 
       return result
@@ -63,7 +77,7 @@ class AudioController {
     return result.getResponse();
   }
 
-  public playLater({ url, text }: AudioPlayOptions, input?: HandlerInput): Response {
+  public playLater({ text, token, url }: AudioPlayOptions, input?: HandlerInput): Response {
     /*
       https://developer.amazon.com/docs/custom-skills/audioplayer-interface-reference.html#play
       REPLACE_ENQUEUED: Replace all streams in the queue. This does not impact the currently playing stream.
@@ -71,7 +85,9 @@ class AudioController {
     const result = ResponseFactory.init();
 
     // we are using url as token as they are all unique
-    result.addAudioPlayerPlayDirective("REPLACE_ENQUEUED", url, url, 0).withShouldEndSession(true);
+    result
+      .addAudioPlayerPlayDirective("REPLACE_ENQUEUED", url, token || url, 0)
+      .withShouldEndSession(true);
 
     if (text) {
       result.speak(text);

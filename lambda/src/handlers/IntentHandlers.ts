@@ -10,7 +10,7 @@ import { Response } from "ask-sdk-model";
 import { IHandler } from ".";
 import * as Strings from "../assets/Strings";
 import { intents, requests } from "../Constants";
-import { audio, getStreamURLFromContext } from "../controllers/AudioController";
+import { audio, getAudioTokenFromHandlerInput } from "../controllers/AudioController";
 import { LaunchRequestHandler } from "./LaunchRequestHandlers";
 
 export const IntentHandler: IHandler = {
@@ -77,7 +77,7 @@ export const IntentHandler: IHandler = {
   // },
 
   // [intents.AMAZON.RESUME]: async (input: HandlerInput): Promise<Response> => {
-  //   const url = getStreamURLFromContext(input);
+  //   const url = getAudioTokenFromHandlerInput(input);
   //   return audio.play({ url });
   // },
 

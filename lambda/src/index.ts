@@ -15,6 +15,7 @@ import {
   PlaybackControllerHandler,
   SystemHandler,
 } from "./handlers";
+import { RequestInterceptor, ResponseInterceptor } from "./interceptors";
 import { RequestHandler } from "./RequestHandlerBuilder";
 
 const skillBuilder = Alexa.SkillBuilders.custom();
@@ -36,5 +37,8 @@ export const handler = skillBuilder
       // })
       .build()
   )
+  // if using request or response interceptors
+  // .addRequestInterceptors(RequestInterceptor)
+  // .addResponseInterceptors(ResponseInterceptor)
   .addErrorHandlers(ErrorHandler)
   .lambda();
