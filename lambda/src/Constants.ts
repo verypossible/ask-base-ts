@@ -1,5 +1,8 @@
 // This file exports constants to help product against developer error.
 export * from "ask-constants";
 
-// are we in debug?
-export const debug: boolean = true;
+export const config = {
+  // are we in debug?
+  debug: !!(process.env.DEBUG === "true"),
+  silent: !!(process.env.SILENT === "true"),
+};

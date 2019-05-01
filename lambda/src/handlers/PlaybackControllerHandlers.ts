@@ -9,7 +9,7 @@ import { Response } from "ask-sdk-model";
 import { IHandler } from ".";
 import * as Strings from "../assets/Strings";
 import { requests } from "../Constants";
-import { audio, getStreamURLFromContext } from "../controllers/AudioController";
+import { audio, getAudioTokenFromHandlerInput } from "../controllers/AudioController";
 
 export const PlaybackControllerHandler: IHandler = {
   [requests.PlaybackController.NEXT]: async (input: HandlerInput): Promise<Response> =>
@@ -19,7 +19,7 @@ export const PlaybackControllerHandler: IHandler = {
     audio.stop(),
 
   [requests.PlaybackController.PLAY]: async (input: HandlerInput): Promise<Response> => {
-    const url = getStreamURLFromContext(input);
+    const url = getAudioTokenFromHandlerInput(input);
     if (url) {
       return audio.play({ url });
     }

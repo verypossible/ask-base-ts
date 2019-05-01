@@ -7,7 +7,7 @@ import { HandlerInput } from "ask-sdk-core";
 import { interfaces, Response } from "ask-sdk-model";
 
 import { IHandler } from ".";
-import { audio, getStreamURLFromContext } from "../controllers/AudioController";
+import { audio, getAudioTokenFromHandlerInput } from "../controllers/AudioController";
 
 import { requests } from "../Constants";
 
@@ -23,7 +23,7 @@ export const AudioHandler: IHandler = {
       .request as interfaces.audioplayer.PlaybackFailedRequest;
     console.log("Playback failed: ", JSON.stringify(failedRequest.error)); // tslint:disable-line:no-console
 
-    const url = failedRequest.currentPlaybackState.token || getStreamURLFromContext(input);
+    const url = getAudioTokenFromHandlerInput(input);
     if (url) {
       return audio.play({ url });
     }
@@ -35,9 +35,7 @@ export const AudioHandler: IHandler = {
     input.responseBuilder.getResponse(),
 
   [requests.AudioPlayer.NEARLY_FINISHED]: async (input: HandlerInput): Promise<Response> => {
-    const url =
-      (input.requestEnvelope.request as interfaces.audioplayer.PlaybackNearlyFinishedRequest)
-        .token || getStreamURLFromContext(input);
+    const url = getAudioTokenFromHandlerInput(input);
     if (url) {
       return audio.playLater({ url });
     }

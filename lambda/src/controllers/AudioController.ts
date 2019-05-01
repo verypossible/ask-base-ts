@@ -1,18 +1,23 @@
 // This file exports a controller for providing audio play/stop functionality.
 
 import { HandlerInput, ImageHelper, ResponseFactory } from "ask-sdk-core";
-import { Response } from "ask-sdk-model";
+import { interfaces, Response } from "ask-sdk-model";
 
-// Retrieve the audio stream url by pulling it out of the context.
-// Use this when the session is not available.
-export function getStreamURLFromContext(input: HandlerInput): string {
-  let url;
+// Retrieve an audio token from the handler input
+export function getAudioTokenFromHandlerInput(input: HandlerInput): string {
+  let token: string;
+
   try {
-    url = input.requestEnvelope.context.AudioPlayer.token;
+    if (input.requestEnvelope.request.type.startsWith("AudioPlayer")) {
+      token = (input.requestEnvelope.request as interfaces.audioplayer.PlaybackFailedRequest).token;
+    } else {
+      token = input.requestEnvelope.context.AudioPlayer.token;
+    }
   } catch (e) {
     // do nothing
   }
-  return url;
+
+  return token;
 }
 
 interface AudioOptions {
